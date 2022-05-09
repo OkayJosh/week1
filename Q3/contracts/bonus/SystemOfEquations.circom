@@ -1,7 +1,8 @@
 pragma circom 2.0.0;
 
 include "../../node_modules/circomlib/circuits/comparators.circom";
-include ""; // hint: you can use more than one templates in circomlib-matrix to help you
+include "../node_modules/circomlib/circuits/transpose.circom";
+include "../node_modules/circomlib/circuits/matElemMul.circom";
 
 template SystemOfEquations(n) { // n is the number of variables in the system of equations
     signal input x[n]; // this is the solution to the system of equations
@@ -10,6 +11,16 @@ template SystemOfEquations(n) { // n is the number of variables in the system of
     signal output out; // 1 for correct solution, 0 for incorrect solution
 
     // [bonus] insert your code here
+
+    component transpose = transpose(3,3);
+    component multiply = matElemMul(3,3);
+    transpose.a <== A;
+    multiply.a <== transpose.out;
+    multiply.b <== B;
+
+
+    out <== multiply.out;
+
 }
 
 component main {public [A, b]} = SystemOfEquations(3);
